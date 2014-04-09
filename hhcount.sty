@@ -1,0 +1,337 @@
+% FANCY COUNTERS for LaTeX2e, version 1.03,
+% written by Herman Haverkort, 31 march 1995
+% See end of file for information on warranty, distribution etc.
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{hhcount}[1995/03/31 Fancy counters]
+\RequirePackage{hhutils0}
+
+% !!! This package causes severe problems when using running heads !!!
+%     containing section numbers!
+
+% !!! This package should not be loaded before makeidx or index !!!
+%     or before the macro \makeindex is called!
+
+% ****************************
+% *     COUNTER SYSTEMS      *
+% ****************************
+
+% \@stpelt is a LaTeX macro which is called by \stepcounter
+% to reset lower level counters. It is redefined to reset _all_
+% lower level counters recursively.
+\def\@stpelt#1{\global\csname c@#1\endcsname \z@ \csname cl@#1\endcsname}
+
+\def\combinecounters#1#2{{%
+  \@temptokena={\protect\fancycounter#1}\def\@tempc{}\@tempcnta=0%
+  \def\\{\@ifnextchar*\@tempa\@tempb}%
+  \def\@tempa*##1{\advance\@tempcnta1}%
+  \def\@tempb{\@tempa*}#2%
+  \def\@tempa*##1{%
+    \@ifundefined{c@##1}{\newcounter{##1}}{}%
+    \ifx\@tempc\@empty\else\@addtoreset{##1}\@tempc\fi
+    \@temptokena=\expandafter{\the\@temptokena-\arabic{##1}}%
+    \advance\@tempcnta-1%
+    \def\@tempc{##1}}%
+  \def\@tempb##1{\@tempa*{##1}%
+    \@temptokenb=\@temptokena\@tempcntb=\@tempcnta
+    \@whilenum\@tempcntb>0\do{%
+      \@temptokenb=\expandafter{\the\@temptokenb-0}%
+      \advance\@tempcntb-1}%
+    \@namexdef{the##1}{\the\@temptokenb-!}%
+    \@namegdef{p@##1}{}}#2}}
+\h@newtoks\@temptokenb
+
+\def\setcounterformat#1#2#3{%
+  \@namedef{fancycounter#1}#2-!{\fcinit#3\fcfinish}}
+
+\def\fancycounter#1-{\@nameuse{fancycounter#1}}
+\def\fancycounters#1,{{\fcinlist\fancycounter #1-!}%
+  \@ifnextchar!\@gobble{, \fancycounters}}
+
+% ****************************
+% *     INITIALIZATION       *
+% ****************************
+
+\def\initfancycounters{%
+  \@ifnextchar[{\h@initfancycounters}{\h@initfancycounters[3]}}
+\def\h@initfancycounters[#1]{%
+  \def\fcpartseries{1}
+  \def\fcchapterseries{3}
+  \def\fcequationseries{5}
+  \def\fctableseries{6}
+  \def\fcfigureseries{7}
+  \def\fcfootnoteseries{8}
+  \def\fcpageseries{12}
+  %
+  \combinecounters\fcpartseries{\\{part}}
+  \setcounterformat\fcpartseries{##1}{\fcorfinally\fcformat{##1}\fcromanlined\fcordespair}
+  %
+  \ifnum#1<2\relax
+    \combinecounters\fcchapterseries{%
+      \\{chapter}\\{section}\\{subsection}\\{subsubsection}%
+      \\{paragraph}\\{subparagraph}\\{enumi}}
+    \setcounterformat\fcchapterseries{##1-##2-##3-##4-##5-##6-##7}{%
+      \fcformat{##7}{\fcsurround{}\fcdigit.}\fcorfinally
+      \fcformat{##1}\fcdigit[-]\fcformat{##2}[.]\fcdigit[-]%
+        \fcformat{##3}[.]\fcdigit[-]\fcformat{##4}[.]\fcdigit[-]%
+        \fcformat{##5}[.]\fcdigit[-]\fcformat{##6}[.]\fcdigit[-]%
+        \fcformat{##7}[$\cdot$]\fcdigit\fcordespair}
+  \else\ifnum#1=2\relax
+    \combinecounters\fcchapterseries{%
+      \\{chapter}\\{section}\\{subsection}\\{subsubsection}%
+      \\{paragraph}\\{enumi}\\{enumii}}
+    \setcounterformat\fcchapterseries{##1-##2-##3-##4-##5-##6-##7}{%
+      \fcformat{##7}{\fcsurround(\fcloweralpha)}\fcor
+      \fcformat{##6}{\fcsurround{}\fcdigit.}\fcorfinally
+      \fcformat{##1}\fcdigit[-]\fcformat{##2}[.]\fcdigit[-]%
+        \fcformat{##3}[.]\fcdigit[-]\fcformat{##4}[.]\fcdigit[-]%
+        \fcformat{##5}[.]\fcdigit[-]\fcformat{##6}[$\cdot$]\fcdigit[-]%
+        \fcformat{##7}[]{\fcsurround(\fcloweralpha)}\fcordespair}
+  \else\ifnum#1=3\relax
+    \combinecounters\fcchapterseries{%
+      \\{chapter}\\{section}\\{subsection}\\{subsubsection}%
+      \\{enumi}\\{enumii}\\{enumiii}}
+    \setcounterformat\fcchapterseries{##1-##2-##3-##4-##5-##6-##7}{%
+      \fcformat{##7}{\fcsurround{}\fclowerroman.}\fcor
+      \fcformat{##6}{\fcsurround(\fcloweralpha)}\fcor
+      \fcformat{##5}{\fcsurround{}\fcdigit.}\fcorfinally
+      \fcformat{##1}\fcdigit[-]\fcformat{##2}[.]\fcdigit[-]%
+        \fcformat{##3}[.]\fcdigit[-]\fcformat{##4}[.]\fcdigit[-]%
+        \fcformat{##5}[$\cdot$]\fcdigit[-]%
+        \fcformat{##6}[]{\fcsurround(\fcloweralpha)}%
+        \fcformat{##7}\fclowerroman\fcordespair}
+  \else
+    \combinecounters\fcchapterseries{%
+      \\{chapter}\\{section}\\{subsection}%
+      \\{enumi}\\{enumii}\\{enumiii}\\{enumiv}}
+    \setcounterformat\fcchapterseries{##1-##2-##3-##4-##5-##6-##7}{%
+      \fcformat{##7}{\fcsurround{}\fcalpha.}\fcor
+      \fcformat{##6}{\fcsurround{}\fclowerroman.}\fcor
+      \fcformat{##5}{\fcsurround(\fcloweralpha)}\fcor
+      \fcformat{##4}{\fcsurround{}\fcdigit.}\fcorfinally
+      \fcformat{##1}\fcdigit[-]\fcformat{##2}[.]\fcdigit[-]%
+        \fcformat{##3}[.]\fcdigit[-]\fcformat{##4}[$\cdot$]\fcdigit[-]%
+        \fcformat{##5}[]{\fcsurround(\fcloweralpha)}%
+        \fcformat{##6}\fclowerroman[.]\fcformat{##7}\fcalpha\fcordespair}
+  \fi\fi\fi
+  %
+  \combinecounters\fcequationseries{\\*{chapter}\\{equation}}
+  \setcounterformat\fcequationseries{##1-##2}{%
+    \fcformat{##1}\fcdigit[.]\fcformat{##2}\fcdigit\fcorfinally
+    (\fcformat{##1}\fcdigit[.]\fcformat{##2}\fcdigit)\fcordespair}
+  %
+  \combinecounters\fctableseries{\\*{chapter}\\{table}}
+  \setcounterformat\fctableseries{##1-##2}{%
+    \fcformat{##1}\fcdigit[.]\fcformat{##2}\fcdigit\fcorfinally
+    \fctabsign\fcformat{##1}\fcdigit[.]\fcformat{##2}\fcdigit\fcordespair}
+  \def\fctabsign{{%
+    \sbox\@tempboxa{$=$}%
+    \hbox to \wd\@tempboxa{\rlap{\box\@tempboxa}\hss$\parallel$\hss}}}
+  %
+  \combinecounters\fcfigureseries{\\*{chapter}\\{figure}}
+  \setcounterformat\fcfigureseries{##1-##2}{%
+    \fcformat{##1}\fcdigit[.]\fcformat{##2}\fcdigit\fcorfinally
+    \fbox{\fcformat{##1}\fcdigit[.]\fcformat{##2}\fcdigit}\fcordespair}
+  %
+  \combinecounters\fcfootnoteseries{\\*{chapter}\\{footnote}}
+  \setcounterformat\fcfootnoteseries{##1-##2}{%
+    \fcformat{##2}\fcdigit\fcorfinally
+    \fcformat{##1}\fcdigit$^{\fcformat{##2}\fcdigit}$\fcordespair}
+  %
+  \combinecounters\fcpageseries{\\{page}}
+  \setcounterformat\fcpageseries{##1}{\fcorfinally\fcformat{##1}\fcdigit\fcordespair}
+}
+
+% *******************************
+% * COMBINED COUNTER FORMATTING *
+% *******************************
+
+\def\fcinit{\begingroup\global\@fcstartedfalse\def\h@fc@link{}\def\h@fc@prefix{}%
+            \if@fcfull\def\next{\h@fc@gobbleformats}\else\def\next{}\fi\next}
+\def\fcverbose#1#2{\if@fcverbose\def\next{#1}\else\def\next{#2}\fi\next}
+\def\fcprefix#1{\fcifnonzero{#1}%
+  {\def\h@fc@value{#1}\@ifnextchar[%
+     \h@fc@Aprefix
+     {\expandafter\h@fc@Aprefix\expandafter[\h@fc@link]}}%
+  {\h@fc@Zformat}}
+\def\h@fc@Aprefix[#1]#2{\def\h@fc@prefix{\if@fcstarted#1\fi#2\def\h@fc@link{}}}
+\def\fcor{%
+  \if@fcstarted\def\fcorfinally##1\fcordespair{}\def\next{\h@fc@gobbleformats}%
+  \else\def\next{}\fi\next}
+\def\fcorfinally{%
+  \if@fcstarted\def\fcorfinally##1\fcordespair{}\def\next{\fcorfinally}%
+  \else\def\next{}\fi\next}
+\def\fcordespair{}
+\def\h@fc@gobbleformats#1\fcorfinally{\fcorfinally}
+\def\fcformat#1{\fcifnonzero{#1}{\def\h@fc@value{#1}\h@fc@Aformat}\h@fc@Zformat}
+\def\fcifnonzero#1#2#3{\edef\@tempa{#1}\edef\@tempb{0}%
+  \ifx\@tempa\@tempb\def\next{#3}\else\def\next{#2}\fi\next}
+\def\h@fc@Aformat{\h@fc@prefix\def\h@fc@prefix{}%
+  \@ifnextchar[\h@fc@Bformat{\h@fc@Bformat[\h@fc@link]}}
+\def\h@fc@Bformat[#1]#2{\if@fcstarted#1\fi
+  #2\h@fc@value\global\@fcstartedtrue
+  \@ifnextchar[\h@fc@Cformat{\h@fc@Cformat[]}}
+\def\h@fc@Cformat[#1]{\def\h@fc@link{#1}}
+\def\h@fc@Zformat{\@ifnextchar[\h@fc@Yformat{\h@fc@Yformat[]}}
+\def\h@fc@Yformat[#1]#2{\@ifnextchar[\h@fc@Xformat{}}
+\def\h@fc@Xformat[#1]{}
+\def\fcfinish{\endgroup}
+
+\newif\if@fcstarted
+
+% ****************************
+% *    COUNTER FORMATTING    *
+% ****************************
+
+\def\fcsurround#1#2#3#4{#1#2{#4}#3}
+
+\def\fcdigit{\if@fcoldstyle\def\next{\fcolddigit}\else\def\next{\fctabdigit}\fi\next}
+\def\fctabdigit{}
+\def\fcolddigit{\oldstylenums}
+\def\fcloweralpha#1{\@xalph{#1}}
+\def\fcalpha{\if@fcsmall\def\next{\fcsmallalpha}\else\def\next{\fcbigalpha}\fi\next}
+\def\fcbigalpha#1{\@xAlph{#1}}
+\def\fcsmallalpha#1{{\scshape\@xalph{#1}}}
+\def\fclowerroman{\@roman}
+\def\fcroman{\if@fcsmall\def\next{\fcsmallroman}\else\def\next{\fcbigroman}\fi\next}
+\def\fcbigroman{\@Roman}
+\def\fcsmallroman#1{{\scshape\@roman{#1}}}
+\def\fcromanlined{\if@fcsmall\def\next{\fcsmallromanlined}\else\def\next{\fcbigromanlined}\fi\next}
+\def\fcbigromanlined{\@romanlined{}\@Roman}
+\def\fcsmallromanlined{\@romanlined\scshape\@roman}
+\def\fcdice{\if@fcsmall\def\next{\fcsmalldice}\else\def\next{\fcbigdice}\fi\next}
+\def\fcbigdice#1{{\sbox\@tempboxa{A}\@dice{\ht\@tempboxa}{#1}}}
+\def\fcsmalldice{\@dice{1.2ex}}
+\def\fcscore{\if@fcsmall\def\next{\fcsmallscore}\else\def\next{\fcbigscore}\fi\next}
+\def\fcbigscore#1{{\sbox\@tempboxa{A}\@score{\ht\@tempboxa}{#1}}}
+\def\fcsmallscore{\@score{1.2ex}}
+\def\fcfnsymbol#1{\ensuremath{\@fnsymbol{#1}}}
+
+\def\@xalph{\h@fc@xalph\@alph}
+\def\@xAlph{\h@fc@xalph\@Alph}
+\def\h@fc@xalph#1#2{{\@tempcnta1\relax\@tempcntb#2\relax
+  \@whilenum\@tempcntb>26\do{\advance\@tempcnta1\advance\@tempcntb-26}%
+  \@whilenum\@tempcnta>0\do{#1\@tempcntb\advance\@tempcnta-1}}}
+
+\def\@romanlined#1#2#3{%
+  {\def\thinspace{\kern.08em}%
+   \sffamily\sbox\@tempboxa{\,{#1#2{#3}}\,}%
+   \hbox{\vbox{\hsize\wd\@tempboxa \offinterlineskip
+     \smash{\rlap{\hbox{\hphantom{\,{#1#2{#3}\/{}}\,}\kern-\wd\@tempboxa
+                        \vrule width\wd\@tempboxa depth0.1ex}}}%
+     \copy\@tempboxa
+     \smash{\vrule width\wd\@tempboxa height0.1ex}}}}}
+
+\def\@dice#1{\h@fc@primcount6{\h@fc@dice{#1}}}
+\def\h@fc@dice#1#2{{\setlength\unitlength{#1}\begin{picture}(1,1)
+  \linethickness{.03\unitlength}
+  \put(0,0){\line(0,1){1}}\put(0,1){\line(1,0){1}}
+  \put(0,0){\line(1,0){1}}\put(1,0){\line(0,1){1}}
+  \ifodd#2\put(0.50,0.50){\circle*{0.2}}\fi
+  \ifnum#2>1\put(0.25,0.75){\circle*{0.2}}\put(0.75,0.25){\circle*{0.2}}\fi
+  \ifnum#2>3\put(0.25,0.25){\circle*{0.2}}\put(0.75,0.75){\circle*{0.2}}\fi
+  \ifnum#2>5\put(0.25,0.50){\circle*{0.2}}\put(0.75,0.50){\circle*{0.2}}\fi
+  \end{picture}}}
+
+\def\@score#1{\h@fc@primcount5{\h@fc@score{#1}}}
+\def\h@fc@score#1#2{{\setlength\unitlength{#1}\thicklines\@tempcnta#2\relax
+  \linethickness{.07\unitlength}%
+  \ifnum\@tempcnta>4
+    \rlap{\begin{picture}(1,1)
+        \ifdim\unitlength>10pt\put(0,0){\line(1,1){1}}%
+                        \else\put(0,0.5){\line(1,0){1}}\fi\end{picture}}%
+    \advance\@tempcnta-1\fi
+  \hbox{\@whilenum\@tempcnta>0\do{%
+    \begin{picture}(0.25,1)
+      \put(0.125,0){\line(0,1){1}}\end{picture}%
+    \advance\@tempcnta-1}}}}
+
+\def\h@fc@primcount#1#2#3{\hbox{\@tempcnta#3\relax
+  \@whilenum\@tempcnta>#1\do{#2{#1}\,\advance\@tempcnta-#1}%
+  #2\@tempcnta}}
+
+% ****************************
+% *    CONTEXT SWITCHING     *
+% ****************************
+
+\newif\if@fcoldstyle
+\newif\if@fcsmall
+\newif\if@fcverbose
+\newif\if@fcfull
+% moeten nog level-switches bij voor index
+
+\def\fcinheading{\@fcoldstylefalse\@fcsmallfalse\@fcverbosefalse\@fcfullfalse}
+\def\fcintext{\@fcoldstyletrue\@fcsmalltrue\@fcverbosetrue\@fcfulltrue}
+\def\fcinlist{\@fcoldstylefalse\@fcsmallfalse\@fcverbosefalse\@fcfulltrue}
+
+\fcinheading
+
+\let\h@fc@ref=\ref
+\def\ref#1{{\fcintext\h@fc@ref{#1}}}
+
+\let\h@fc@pageref=\pageref
+\def\pageref#1{{\fcintext\h@fc@pageref{#1}}}
+
+\def\h@fc@initindex{\ifx\h@fc@index\undefined
+  \makeindex
+  \let\h@fc@index=\index
+  \def\index{\begingroup\@ifnextchar*\h@fc@Aindex{\@temptokena={}\h@fc@Bindex}}
+  \def\h@fc@Aindex*{\@temptokena={*}\h@fc@Bindex}
+  \def\h@fc@Bindex{\@ifnextchar[\h@fc@Cindex\h@fc@Dindex}
+  \def\h@fc@Cindex[##1]{\@temptokena=\expandafter{\the\@temptokena[{##1}]}\h@fc@Dindex}
+  \def\h@fc@Dindex##1{\@temptokena=\expandafter{\the\@temptokena{##1}}%
+    \edef\h@fc@currentlabel{\h@fc@strip\h@fc@indexlabel}%
+    \let\h@fc@protectedwrite=\protected@write
+    \def\protected@write####1####2{%
+      \h@fc@protectedwrite{####1}{\def\thepage{\h@fc@currentlabel}####2}}%
+    \def\thepage{\h@fc@currentlabel}%
+    \expandafter\h@fc@index\the\@temptokena\endgroup}
+  %
+  \def\h@fc@strip##1{\expandafter\expandafter\expandafter
+    \h@fc@Astrip##1%
+    \@gobblefour\fancycounter{hhcount cannot convert unfancy labels!}-!}
+  \def\h@fc@Astrip##1\fancycounter##2-!{##2}
+  \def\@gobblefour##1##2##3##4{}
+  %
+  \def\@currentlabel{\fancycounter0-0-!}
+\fi}
+
+\def\indextopages{\h@fc@initindex\def\h@fc@indexlabel{\thepage}}
+\def\indextolabels{\h@fc@initindex\def\h@fc@indexlabel{\@currentlabel}}
+
+\endinput %**********************
+% * WARRANTY, DISTRIBUTION ETC. *
+% *******************************
+%
+% This is a TeX style file by Herman Haverkort. This file is distributed
+% in the hope that it will be useful, but without any warranty; without
+% even the implied warranty of merchantability or fitness for a particular
+% purpose. The author does not accept any responsability for any damage,
+% loss, injury, psychosis, annoyance, marital problems, murders etc. which
+% are caused by this file.
+%
+% This style file has not been tested systematically, so there are
+% probably undiscoverd errors in it. If you find one, if you have
+% trouble using this file, if you have a suggestion for an extension or
+% another modification, or if you are just a happy user, please report
+% it to:
+%                       Herman Haverkort
+%                       Heyenoordseweg 40
+%                      NL-6813 GA  Arnhem
+%                      herman@fgbbs.iaf.nl
+%
+% You are allowed to change this file, but you are not allowed to distribute
+% the changed version unless you obey the following:
+% -  give the changed version another file name than the original one;
+% -  record clearly in the changed version:
+%    -  the original name of the file;
+%    -  its original author;
+%    -  that it is a changed version;
+% -  do not remove the restrictions on distributing this file.
+%
+% You are not allowed to take money for the distribution or use of either
+% this file or a changed version, except for a nominal charge for copying
+% etc.
+%
+% Have fun!
+

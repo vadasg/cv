@@ -1,0 +1,89 @@
+%CV Copyright Vadas Gintautas (vadasg@gmail.com) 2006-2014
+\documentclass[margin,line]{vg-res}
+
+%\usepackage[T1]{fontenc}
+\usepackage{notoccite}
+\usepackage{hhcount}
+\usepackage{tikz}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+%\usepackage{hyperref}
+\usepackage[resetlabels]{vg-multibib} %multiple bibliographies; the count resets for each
+
+%define new bibliography types
+%\newcites{bibpublications,bibpapersinpreparation,bibinvitedtalks,bibconferencepresentationsandproceedings}{Publications,Papers in Preparation,Invited Talks,Conference Presentations and Proceedings}
+\newcites{bibpublications,bibinvitedtalks,bibconferencepresentationsandproceedings}{Publications,Invited Talks,Conference Presentations and Proceedings}
+\renewcommand{\refname}{}  %suppress bibliography names
+
+\lhead{}
+\chead{}
+\rhead{Gintautas \thepage}
+\lfoot{}
+\cfoot{}
+\rfoot{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headheight}{12pt}
+
+
+\oddsidemargin -.5in
+\evensidemargin -.5in
+\textwidth=6.0in
+\itemsep=0in
+\parsep=0in
+
+\newenvironment{list1}{
+  \begin{list}{\ding{113}}{%
+      \setlength{\itemsep}{0in}
+      \setlength{\parsep}{0in} \setlength{\parskip}{0in}
+      \setlength{\topsep}{0in} \setlength{\partopsep}{0in} 
+      \setlength{\leftmargin}{0.17in}}}{\end{list}}
+\newenvironment{list2}{
+  \begin{list}{$\bullet$}{%
+      \setlength{\itemsep}{0in}
+      \setlength{\parsep}{0in} \setlength{\parskip}{0in}
+      \setlength{\topsep}{0in} \setlength{\partopsep}{0in} 
+      \setlength{\leftmargin}{0.2in}}}{\end{list}}
+
+
+\begin{document}
+
+\bibliographystylebibpublications{vg-cvbib}
+%\bibliographystylebibpapersinpreparation{vg-cvbib}
+\bibliographystylebibinvitedtalks{vg-cvbib}
+\bibliographystylebibconferencepresentationsandproceedings{vg-cvbib}
+
+
+\name{\Large Vadas Gintautas \vspace*{.1in}}
+\thispagestyle{empty}
+\begin{resume}
+%Updated \today.
+
+\input{sections/contact_information}
+\input{sections/education_no_gpa}
+\input{sections/technical_skills}
+\input{sections/research_interests}
+\input{sections/professional_experience}
+%\input{sections/physics_education_research_experience}
+\vspace{-2mm}
+\input{sections/honors_and_awards}
+%\newpage
+\input{sections/publications}
+%\input{sections/papers_in_preparation}
+%\newpage
+\input{sections/invited_talks}
+\input{sections/conference_presentations_and_proceedings}
+\input{sections/teaching_experience}
+\input{sections/memberships_and_outreach}
+%\input{sections/references}
+
+
+
+%\newpage
+%\newpage
+
+\vspace*{1mm}
+Copies of publications are available upon request.
+\end{resume}
+
+
+\end{document} 
