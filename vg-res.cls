@@ -475,6 +475,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % makes a line of width \textwidth starting at -\hoffset
 %
+%\moveleft\hoffset\vbox{\hrule width\textwidth} 
 \def\fullline{		% hrules only listen to \hoffset
   \nointerlineskip	% so I have this code	  
   \moveleft\hoffset\vbox{\hrule width\textwidth} 
@@ -504,7 +505,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % if you want to print your name and address is a slightly
-% different format than sugessted, then this can be used
+% different format than suggested, then this can be used
 % to place it exactly where you want
 %
 \def\opening{\def\@opening{}
