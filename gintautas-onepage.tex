@@ -1,6 +1,9 @@
 %CV Copyright Vadas Gintautas (vadasg@gmail.com) 2006-2014
 \documentclass[margin,line]{vg-res}
-%\usepackage[default,semibold,extralight]{sourcesanspro}
+
+\usepackage{xltxtra}
+%\setmainfont{DovesType-Regular}
+
 %\usepackage[T1]{fontenc}
 \usepackage{notoccite}
 \usepackage{hhcount}
@@ -11,8 +14,8 @@
 \usepackage[resetlabels]{vg-multibib} %multiple bibliographies; the count resets for each
 
 %define new bibliography types
-\newcites{bibpublications,bibinvitedtalks,bibconferencepresentationsandproceedings}{Publications,Invited Talks,Conference Presentations and Proceedings}
 %\newcites{bibpublications,bibpapersinpreparation,bibinvitedtalks,bibconferencepresentationsandproceedings}{Publications,Papers in Preparation,Invited Talks,Conference Presentations and Proceedings}
+\newcites{bibselectedpublications,bibinvitedtalks,bibconferencepresentationsandproceedings}{Selected Publications,Invited Talks,Conference Presentations and Proceedings}
 \renewcommand{\refname}{}  %suppress bibliography names
 
 \lhead{}
@@ -47,43 +50,43 @@
 
 \begin{document}
 
-%\fontfamily{comicsans}\selectfont
-\bibliographystylebibpublications{vg-cvbib}
+\bibliographystylebibselectedpublications{vg-cvbib}
 %\bibliographystylebibpapersinpreparation{vg-cvbib}
 \bibliographystylebibinvitedtalks{vg-cvbib}
 \bibliographystylebibconferencepresentationsandproceedings{vg-cvbib}
 
 
-\name{\Large Vadas Gintautas\vspace*{.1in}}
+\name{\Large Vadas Gintautas \vspace*{.1in}}
 \thispagestyle{empty}
 \begin{resume}
 %Updated \today.
+
 \input{sections/contact_information_filled}
+\input{sections/technical_skills}
 \input{sections/research_interests}
+\vspace{-2mm}
 \input{sections/education_no_gpa}
-%\input{sections/technical_skills}
-\input{sections/teaching_experience}
-
-\newpage
-
-\vspace*{-.2in}
+\input{sections/selected_professional_experience}
+%\input{sections/entrepreneurial_experience}
 %\input{sections/physics_education_research_experience}
-\input{sections/honors_and_awards}
-\input{sections/research_experience}
-
-\newpage
-
-\vspace*{-.2in}
-\input{sections/publications}
-%\input{sections/papers_in_preparation}
-\input{sections/invited_talks}
+%\vspace{-2mm}
 %\newpage
-\input{sections/conference_presentations_and_proceedings}
-\input{sections/memberships_and_outreach}
+%\vspace*{-8mm}
+\input{sections/selected_publications}
+%\input{sections/papers_in_preparation}
+%\newpage
+%\input{sections/invited_talks}
+%\vspace{-2mm}
+%\input{sections/conference_presentations_and_proceedings}
+%\vspace{-3mm}
+%\input{sections/teaching_experience}
+%\input{sections/honors_and_awards}
+%\input{sections/memberships_and_outreach}
 %\input{sections/references}
-
-\vspace*{1mm}
-%Copies of publications are available upon request.
+%\newpage
+%\vspace*{1mm}
+%References and copies of publications are available upon request.
 \end{resume}
+
 
 \end{document} 

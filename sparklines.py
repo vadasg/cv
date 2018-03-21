@@ -105,7 +105,7 @@ def section_parse(section,years,maxct):
 
 if __name__ == '__main__':
     #exclude = ['contact_information','research_interests','education_no_gpa']
-    exclude = ['contact_information','research_interests','technical_skills']
+    exclude = ['contact_information_filled','contact_information','research_interests','technical_skills']
     startyear = 2000
     maxv = []
     for i in glob.glob('*.bbl'):
